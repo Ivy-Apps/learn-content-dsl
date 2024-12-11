@@ -43,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.ivy_apps.di"
+    namespace = "com.ivy_apps.learn.dsl"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
