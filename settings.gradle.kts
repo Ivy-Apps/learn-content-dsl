@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ivy-learn-dsl"
-include(":learn-dsl")
+rootProject.name = "ivy-learn-content-dsl"
+include(":learn-content-dsl")
 include(":samples")
