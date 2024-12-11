@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.publish)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -30,7 +31,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
+                implementation(libs.kotlin.serialization)
             }
         }
         val commonTest by getting {
@@ -43,7 +44,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.ivy_apps.learn.dsl"
+    namespace = "com.ivy_apps.learn"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
