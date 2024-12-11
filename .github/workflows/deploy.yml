@@ -1,0 +1,58 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Deploy to central
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+env:
+  ORG_GRADLE_PROJECT_mavenCentralUsername: '${{ secrets.MAVEN_CENTRAL_USERNAME }}'
+  ORG_GRADLE_PROJECT_mavenCentralPassword: '${{ secrets.MAVEN_CENTRAL_PASSWORD }}'
+  ORG_GRADLE_PROJECT_signingInMemoryKeyId: '${{ secrets.SIGNING_KEY_ID }}'
+  ORG_GRADLE_PROJECT_signingInMemoryKey: '${{ secrets.SIGNING_KEY }}'
+  ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: '${{ secrets.SIGNING_KEY_PASSWORD }}'
+
+jobs:
+  build:
+    uses: ./.github/workflows/gradle.yml
+  deploy:
+    needs: build
+    strategy:
+      matrix:
+        include:
+          - target: publishIosArm64PublicationToMavenCentral
+            os: macos-latest
+          - target: publishAndroidReleasePublicationToMavenCentral
+            os: ubuntu-latest
+          - target: publishJvmPublicationToMavenCentral
+            os: ubuntu-latest
+          - target: publishLinuxX64PublicationToMavenCentral
+            os: ubuntu-latest
+          - target: publishKotlinMultiplatformPublicationToMavenCentral
+            os: ubuntu-latest
+          - target: publishJsPublicationToMavenCentral
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.konan
+          key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Publish to Maven Central
+        run: ./gradlew publish --no-configuration-cache
