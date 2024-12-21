@@ -13,6 +13,7 @@ data class Lesson(
     val content: LessonContent,
     val completed: Boolean,
     val premium: Boolean = false,
+    val version: String? = null,
 ) : Identifiable<LessonId>
 
 @Serializable
