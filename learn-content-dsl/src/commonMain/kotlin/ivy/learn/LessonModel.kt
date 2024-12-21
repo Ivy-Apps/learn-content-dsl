@@ -12,6 +12,7 @@ data class Lesson(
     val image: ImageUrl,
     val content: LessonContent,
     val completed: Boolean,
+    val premium: Boolean = false,
 ) : Identifiable<LessonId>
 
 @Serializable
