@@ -6,11 +6,12 @@ fun main() {
   val prompt = lessonPrompt(
     topic = "Time complexity: What and why?",
     learningGoal = """
-What is Time Complexity, Big O 101 and why we need those?
+Wtf is Big O and why should I care? I need a high-level overview.
    """.trimIndent(),
     analogies = listOf(
       "searching friend's phone in a phonebook",
-      "pairing students in teams"
+      "word in a dictionary",
+      "brute-forcing 4 digit PIN"
     )
   )
   println("===== PROMPT ====")
@@ -58,8 +59,10 @@ Help students confidently achieve **"$learningGoal"**.
 - Start with the **importance of $topic**, followed by a gradual introduction using **relatable analogies** and **simple Python examples**.
 - Make students think and learn by answering questions that uncover key ideas.
 - Prioritize clarity, progression, and engagement.
+- Questions, questions, questions. Start with questions and teach by asking questions.
 
 **Outcome**: Create the best online explanation of **"$topic"** that is easy, engaging, and memorable for students.
+Your objective is to achieve the learning goal: $learningGoal.
 
 ## DSL Reference
 ```kotlin
@@ -79,16 +82,16 @@ interface TextScope {
     var text: String
 }
 
-interface CodeScope {
-  @LearnCmsDsl
-  fun line(codeLine: String)
-}
-
 enum class TextStyle {
     Heading,
     Body,
     BodySpacingMedium,
     BodySpacingLarge
+}
+
+interface CodeScope {
+  @LearnCmsDsl
+  fun line(codeLine: String)
 }
 
 interface QuestionScope {
