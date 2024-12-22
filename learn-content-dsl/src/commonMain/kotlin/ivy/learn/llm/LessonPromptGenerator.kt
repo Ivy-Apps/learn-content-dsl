@@ -1,7 +1,5 @@
 package ivy.learn.llm
 
-import ivy.learn.TextStyle
-
 fun main() {
   val prompt = lessonPrompt(
     topic = "Time Complexity (Big O notation)",
@@ -34,10 +32,12 @@ fun lessonPrompt(
 Create an interactive, beginner-friendly lesson to help learners understand $topic. 
 The lesson should be:
 1. Easy to follow: Use simple, clear language with short sections.
-2. Highly visual and example-driven: Include code snippets and real-world analogies to explain concepts.
-3. Engaging: Design with questions and activities learners can interact with, emphasizing key concepts.
+2. Highly visual and example-driven: Include code snippets, diagrams, and real-world analogies to explain concepts.
+3. Engaging: Incorporate questions, activities, and scenarios learners can interact with, emphasizing key concepts.
+4. Adaptable: The structure and DSL elements should be purposefully selected to achieve the learning goal.
 
 # Structure:
+The following structure is a guideline. Feel free to adapt and reorder elements as needed to best serve the learning goals:
 ${structure.mapIndexed { index, bullet -> "${index + 1}. $bullet" }.joinToString(separator = "\n")}
 
 **Tone**: Friendly, encouraging, and engaging, aimed at learners new to algorithms or computer science.
@@ -47,67 +47,53 @@ ${structure.mapIndexed { index, bullet -> "${index + 1}. $bullet" }.joinToString
 Use only the Kotlin DSL defined below—no extra structures or deviations.
 Ensure that the ids in the lesson are unique and that there are NO duplicated ids.
 
-The lesson should be feel good, logically connected and explain the concept 
-assuming no prior knowledge beside: "${priorKnowledge.joinToString(separator = ",")}"
+The lesson should feel coherent, logically connected, and accessible to learners with no prior knowledge besides: "${
+    priorKnowledge.joinToString(
+      separator = ","
+    )
+  }."
 
 ### Example usage of DSL
-The order does NOT matter, use any arbitrary order that matches learning goals.
+These examples are NOT prescriptive. Use the DSL flexibly and creatively, choosing the most suitable elements and order to achieve the learning goals.
+
 ```kotlin
 lessonContent {
-  text("id") {
-    text = "Topic Title"
-    style = TextStyle.Heading // Supported styles ${TextStyle.entries.joinToString(",")}
+  // A creative example deviating from strict order
+  text("introduction") {
+    text = "Understanding Big O Notation"
+    style = TextStyle.Heading
   }
 
-  image("topic_diagram") {
-    imageUrl = "https://example.com/example_image.png"
-  }
-
-  // Single Correct Answer (1 of 4)
-  question("single_correct_q") {
-    question = "Which option best represents the core concept?"
-    clarification = "Select the most appropriate answer from the options."
-    answer(text = "Correct Answer", correct = true, explanation = "This option aligns with the main idea.")
-    answer(text = "Option 2", explanation = "This is partially correct but doesn't capture the full idea.")
-    answer(text = "Option 3", explanation = "This is incorrect as it misunderstands the concept.")
-    answer(text = "Option 4", explanation = "This is unrelated to the topic.")
-  }
-
-  // Two Options Question (1 of 2)
-  question("two_options_q") {
-    question = "True or False: This concept is applicable to real-world problems."
-    clarification = "Consider the practicality of applying this concept."
-    answer(text = "True", correct = true, explanation = "Yes, this concept can be applied in many real-world scenarios.")
-    answer(text = "False", explanation = "This is incorrect as the concept has practical applications.")
-  }
-
-  // Multiple Correct Answers (N of M)
-  question("multiple_correct_q") {
-    question = "Which of the following statements are true about the topic?"
-    clarification = "Select all correct answers."
-    answer(text = "Statement A", correct = true, explanation = "This is a true statement about the topic.")
-    answer(text = "Statement B", explanation = "This is incorrect as it contradicts the topic.")
-    answer(text = "Statement C", correct = true, explanation = "This statement aligns with the principles of the topic.")
-    answer(text = "Statement D", explanation = "This is not true as it misrepresents the core idea.")
-  }
-
-  // Python code example
-  codeExample("code_example") {
+  codeExample("code_snippet") {
     text = codeBuilder {
-      line("# Example demonstrating the application of the topic")
-      line("def exampleFunction():")
-      line("  print(\"This demonstrates the concept effectively.\")")
-      line("")
-      line("exampleFunction()")
+      line("# Let's analyze the time complexity of this function")
+      line("def search(array, target):")
+      line("  for i in range(len(array)):")
+      line("    if array[i] == target:")
+      line("      return i")
+      line("  return -1")
     }
+  }
 
-  // Text with bullets
-  text("bullets") {
+  question("real_world_q") {
+    question = "Which complexity best describes searching for a name in a phonebook?"
+    clarification = "Think about the strategy used for searching."
+    answer(text = "O(1)", explanation = "Incorrect, this represents constant time complexity.")
+    answer(text = "O(logn)", correct = true, explanation = "Correct! Binary search in a sorted phonebook is logarithmic.")
+    answer(text = "O(n)", explanation = "Not quite; this would be for unsorted linear search.")
+  }
+
+  image("diagram") {
+    imageUrl = "https://example.com/bigo_chart.png"
+  }
+
+  text("summary") {
     text = textBuilder { 
-      bullet("Bullet one")
-      bullet("Bullet two")
-      bullet("Bullet three")
+      bullet("Big O helps measure algorithm efficiency.")
+      bullet("Common complexities include O(1), O(n), O(logn), O(n^2).")
+      bullet("Understand when to use each to optimize performance.")
     }
+  }
 }
 ```
 
