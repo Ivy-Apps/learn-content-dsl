@@ -15,29 +15,30 @@ fun lessonContent(
   return scope.build()
 }
 
+fun lessonJson(): Json = Json {
+  ignoreUnknownKeys = true
+  isLenient = true
+  coerceInputValues = true
+  explicitNulls = false
+  serializersModule = SerializersModule {
+    polymorphic(LessonItem::class) {
+      subclass(ChoiceItem.serializer())
+      subclass(ImageItem.serializer())
+      subclass(LessonNavigationItem.serializer())
+      subclass(LinkItem.serializer())
+      subclass(LottieAnimationItem.serializer())
+      subclass(MysteryItem.serializer())
+      subclass(OpenQuestionItem.serializer())
+      subclass(QuestionItem.serializer())
+      subclass(TextItem.serializer())
+    }
+  }
+}
+
 fun printLessonJson(lesson: LessonContent) {
   validateIdsExistence(lesson)
   validateIdsUniqueness(lesson)
-  val json = Json {
-    ignoreUnknownKeys = true
-    isLenient = true
-    coerceInputValues = true
-    explicitNulls = false
-    serializersModule = SerializersModule {
-      polymorphic(LessonItem::class) {
-        subclass(ChoiceItem.serializer())
-        subclass(ImageItem.serializer())
-        subclass(LessonNavigationItem.serializer())
-        subclass(LinkItem.serializer())
-        subclass(LottieAnimationItem.serializer())
-        subclass(MysteryItem.serializer())
-        subclass(OpenQuestionItem.serializer())
-        subclass(QuestionItem.serializer())
-        subclass(TextItem.serializer())
-      }
-    }
-  }
-  println(json.encodeToString(lesson))
+  println(lessonJson().encodeToString(lesson))
 }
 
 fun story(
