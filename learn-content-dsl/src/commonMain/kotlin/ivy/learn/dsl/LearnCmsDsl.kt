@@ -243,6 +243,13 @@ fun codeBuilder(builder: CodeBuilderScope.() -> Unit): String {
     return scope.build()
 }
 
+@LearnCmsDsl
+fun LessonContentScope.codeExample(
+    id: String,
+    next: String? = null,
+    builder: TextScope.() -> Unit
+) = text(id, next, builder)
+
 interface CodeBuilderScope {
     @CodeBuilderDsl
     fun line(text: String)
