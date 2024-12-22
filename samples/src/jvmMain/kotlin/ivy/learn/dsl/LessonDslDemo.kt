@@ -16,6 +16,7 @@ fun exampleLesson() = lessonContent {
     question = "What is 2 + 2? (enter exact answer)"
     correctAnswer = "4"
   }
+  someCode()
 }
 
 private fun LessonContentScope.intro() {
@@ -82,5 +83,14 @@ private fun LessonContentScope.internalsQuestion() {
       text = "3.14",
       explanation = "..."
     )
+  }
+}
+
+private fun LessonContentScope.someCode() {
+  text("code-demo") {
+    text = codeBuilder {
+      line("def say_hello():")
+      line("  print('Hello!')")
+    }
   }
 }

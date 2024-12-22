@@ -128,7 +128,9 @@ interface QuestionScope {
 
     @LearnCmsDsl
     fun answer(
-        text: String, explanation: String? = null, correct: Boolean = false
+        text: String,
+        explanation: String? = null,
+        correct: Boolean = false
     )
 }
 
