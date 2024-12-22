@@ -50,54 +50,16 @@ assuming no prior knowledge beside: "${priorKnowledge.joinToString(separator = "
 
 ### Example Usage of DSL
 ```kotlin
-fun exampleLesson() = lessonContent {
-  intro()
-  whyQuestion()
-  whyExplanation()
-  internalsSection()
-  singleCorrectQuestion()
-  twoOptionsQuestion()
-  multipleCorrectQuestion()
-  codeExample()
-}
 
-// Introduction
-private fun LessonContentScope.intro() {
-  text("intro") {
+// Text
+private fun LessonContentScope.text() {
+  text("id") {
     text = "Topic Title"
     style = TextStyle.Heading
   }
-  text("intro_text") {
-    text = "A brief description introducing the topic to learners."
-  }
 }
 
-// Why Question
-private fun LessonContentScope.whyQuestion() {
-  question("why_q") {
-    question = "Why is this topic important?"
-    clarification = "Think about its relevance to problem-solving or understanding concepts."
-    answer(text = "Correct Answer", correct = true, explanation = "This highlights the importance of the topic.")
-    answer(text = "Incorrect Answer", explanation = "This misses the core reason for the topic's importance.")
-    answer(text = "Incorrect Answer 2", explanation = "This answer is unrelated to the topic.")
-    answer(text = "Incorrect Answer 3", explanation = "This is an oversimplification and not entirely correct.")
-  }
-}
-
-// Why Explanation
-private fun LessonContentScope.whyExplanation() {
-  text("why_explain") {
-    text = "An explanation detailing why the topic is relevant and significant in a broader context."
-    style = TextStyle.BodySpacingLarge
-  }
-}
-
-// Internal Mechanics Section
-private fun LessonContentScope.internalsSection() {
-  text("internals") {
-    text = "A detailed explanation of the internal mechanics or foundational concepts of the topic."
-    style = TextStyle.BodySpacingMedium
-  }
+private fun LessonContentScope.image() {
   image("topic_diagram") {
     imageUrl = "https://example.com/example_image.png"
   }
@@ -170,7 +132,6 @@ interface TextScope {
     var text: String
 }
 
-@Serializable
 enum class TextStyle {
     Heading,
     Body,
