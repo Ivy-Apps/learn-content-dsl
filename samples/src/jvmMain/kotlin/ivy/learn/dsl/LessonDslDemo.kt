@@ -94,10 +94,8 @@ private fun LessonContentScope.internalsQuestion() {
 }
 
 private fun LessonContentScope.someCode() {
-  text("code-demo") {
-    text = codeBuilder {
-      line("def say_hello():")
-      line("  print('Hello!')")
-    }
+  code("demo-code") {
+    line("def say_hello():")
+    line("  print('Hello!'")
   }
 }

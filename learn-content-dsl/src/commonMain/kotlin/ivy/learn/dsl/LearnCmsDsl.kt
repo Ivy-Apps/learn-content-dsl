@@ -31,6 +31,7 @@ fun lessonJson(): Json = Json {
       subclass(OpenQuestionItem.serializer())
       subclass(QuestionItem.serializer())
       subclass(TextItem.serializer())
+      subclass(CodeItem.serializer())
     }
   }
 }
@@ -111,6 +112,13 @@ interface LessonContentScope {
   )
 
   @LearnCmsDsl
+  fun code(
+    id: String,
+    next: String? = null,
+    builder: CodeScope.() -> Unit
+  )
+
+  @LearnCmsDsl
   fun question(id: String, builder: QuestionScope.() -> Unit)
 
   @LearnCmsDsl
@@ -143,6 +151,11 @@ interface LessonContentScope {
 interface TextScope {
   var style: TextStyle
   var text: String
+}
+
+interface CodeScope {
+  @LearnCmsDsl
+  fun line(codeLine: String)
 }
 
 interface QuestionScope {
@@ -260,34 +273,3 @@ class TextBuilder : TextBuilderScope {
 
 @DslMarker
 annotation class TextBuilderDsl
-
-fun codeBuilder(builder: CodeBuilderScope.() -> Unit): String {
-  val scope = CodeBuilder().apply(builder)
-  return scope.build()
-}
-
-@LearnCmsDsl
-fun LessonContentScope.codeExample(
-  id: String,
-  next: String? = null,
-  builder: TextScope.() -> Unit
-) = text(id, next, builder)
-
-interface CodeBuilderScope {
-  @CodeBuilderDsl
-  fun line(text: String)
-}
-
-class CodeBuilder : CodeBuilderScope {
-  private val lines = mutableListOf<String>()
-
-  override fun line(text: String) {
-    lines += text
-  }
-
-  fun build(): String = lines.joinToString("\n")
-}
-
-@DslMarker
-annotation class CodeBuilderDsl
-

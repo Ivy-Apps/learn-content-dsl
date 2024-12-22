@@ -6,9 +6,12 @@ fun main() {
   val prompt = lessonPrompt(
     topic = "Time complexity: What and why?",
     learningGoal = """
-Why we need time complexity and what is Big O notation. Only the basics and 101.
+What is Time Complexity, Big O 101 and why we need those?
    """.trimIndent(),
-    priorKnowledge = listOf("no prior knowledge"),
+    analogies = listOf(
+      "searching friend's phone in a phonebook",
+      "pairing students in teams"
+    )
   )
   println("===== PROMPT ====")
   println(prompt)
@@ -18,43 +21,45 @@ Why we need time complexity and what is Big O notation. Only the basics and 101.
 fun lessonPrompt(
   topic: String,
   learningGoal: String,
-  priorKnowledge: List<String>,
+  analogies: List<String>? = null,
 ): String {
   return """
-You're an expert computer scientist making the best educational content on the Internet. Your task is to create an interactive, beginner-friendly lesson to help CS students with no prior knowledge understand "$topic". 
-Based on the best methods and analogies in universities and books, teach "$learningGoal".
+You are an expert computer scientist tasked with creating the best beginner-friendly lesson on **"$topic"** using the provided Kotlin DSL. Your goal is to teach CS students with no prior knowledge the basics of the topic in a way that is clear, practical, and engaging.
 
-The lesson should be:
-1. Easy to follow: Use simple, clear language with short sections. No fancy English words as it's designed for non-native speakers.
-2. Highly example-driven: Include code snippets, every-day life, and real-world analogies to explain concepts.
-3. Engaging: students should re-discover the lesson themselves by answering a series of simple questions that are close to reality.
-4. Adaptable: The structure and DSL elements should be purposefully selected to achieve the learning goal.
-5. Be practical: Include practical examples and analogies. Focus on concise, easy to follow and famous examples for demonstrating '$topic'.
-6. Question-driven: The reader should re-invent and re-discover by answering many questions. Focus on short questions. The explanation of each question answer should  be the main tool to learn. Make answer explanations straightforward and simple to understand by giving real-world reasoning.
-7. Question structure: Each questions must have 4 (four) possible answers. Sometimes you can have more than one correct. It's important the question to short and easy to understand with as few words as possible.
-8. Code examples: Include short and simple code snippets in Python. All code examples must be in Python.
-9. The list of questions and examples should form a comprehensive story optimized to achieve the learning goal.
-10. Prioritize everyday-life and physical analogies that are common to people. Tap your knowledge base for the best analogies on '$learningGoal'.
+### Requirements:
+1. **Keep It Simple**: Use short, clear sentences with no complex words. Aim for non-native English speakers.
+2. **Focus on Basics**: Teach the foundational concepts needed to understand **"$topic"** and meet the **"$learningGoal"**.
+3. **Example-Driven**: Use relatable real-world analogies and simple Python code snippets to explain key concepts.
+4. **Interactive Learning**: Make students discover concepts by answering short, well-crafted questions. Questions should feel logical and guide the learner step-by-step.
+5. **Question Design**:
+   - Each question must have 4 answer choices, with at least one correct answer.
+   - Questions should be short and easy to understand.
+   - Include clear explanations for each answer, showing why it’s correct or incorrect.
+6. **Practical and Logical**: Build a cohesive story using relatable everyday-life analogies, simple examples, and a progression of concepts.
+7. **Tone**: Friendly, encouraging, and accessible. Avoid technical jargon or overly academic language.
+8. **Technical Accuracy**: Ensure all explanations, analogies, and code examples are correct and easy to follow.
+9. **DSL Use**:
+   - Follow the provided DSL structure strictly.
+   - Ensure all IDs are unique and that the code is clean and error-free.
+   
+${
+    if (analogies != null) {
+      "### Preferred analogies:\n${analogies.joinToString(separator = ", ") { "\"$it\"" }}"
+    } else {
+      ""
+    }
+  }
 
-# Structure:
-Pick an appropriate structure for a short, byte-sized lesson that achieves the learning goal.
+### Learning Goal:
+Help students confidently achieve **"$learningGoal"**.
 
-**Tone**: Friendly, encouraging, and engaging, aimed at learners new to algorithms or computer science. Students are non-native English speakers so make short sentences with simple words.
+### Lesson Design Checklist:
+- Use the DSL to add **text**, **code snippets**, and **questions** that work together to form a cohesive learning experience.
+- Start with the **importance of $topic**, followed by a gradual introduction using **relatable analogies** and **simple Python examples**.
+- Make students think and learn by answering questions that uncover key ideas.
+- Prioritize clarity, progression, and engagement.
 
-**Learning Goal**: Ensure students can "$learningGoal" with confidence.
-The lesson should be designed in a way where the reader learns the concepts by answering a series of well-crafted and guiding questions.
-
-**Requirements:**
-- Use only the Kotlin DSL defined below—no extra structures or deviations.
-- Ensure that the ids in the lesson are unique and that there are NO duplicated ids.
-- The question text must be very short and easy to understand.
-- Make sure to double-check that you've picked the simplest and most appropriate examples and analogies in your questions.
-
-The lesson should feel coherent, logically connected, and accessible to learners with no prior knowledge besides: "${
-    priorKnowledge.joinToString(
-      separator = ", "
-    )
-  }".
+**Outcome**: Create the best online explanation of **"$topic"** that is easy, engaging, and memorable for students.
 
 ## DSL Reference
 ```kotlin
@@ -63,7 +68,7 @@ interface LessonContentScope {
     fun text(id: String, builder: TextScope.() -> Unit)
 
     @LearnCmsDsl
-    fun codeExample(id: String, builder: TextScope.() -> Unit)
+    fun code(id: String, builder: CodeScope.() -> Unit)
 
     @LearnCmsDsl
     fun question(id: String, builder: QuestionScope.() -> Unit)
@@ -72,6 +77,11 @@ interface LessonContentScope {
 interface TextScope {
     var style: TextStyle
     var text: String
+}
+
+interface CodeScope {
+  @LearnCmsDsl
+  fun line(codeLine: String)
 }
 
 enum class TextStyle {
@@ -92,16 +102,6 @@ interface QuestionScope {
         correct: Boolean = false
     )
 }
-
-fun codeBuilder(builder: CodeBuilderScope.() -> Unit): String {
-    val scope = CodeBuilder().apply(builder)
-    return scope.build()
-}
-
-interface CodeBuilderScope {
-    @CodeBuilderDsl
-    fun line(text: String)
-}
 ```
 
 Use questions to teach concepts.
@@ -116,16 +116,14 @@ lessonContent {
     style = TextStyle.Heading // Supported ${TextStyle.entries.joinToString(separator = ", ")}
   }
 
-  codeExample("code_snippet") {
-    text = codeBuilder {
-      // A short Python code snippet
-      line("# Let's analyze the time complexity of this function")
-      line("def search(array, target):")
-      line("  for i in range(len(array)):")
-      line("    if array[i] == target:")
-      line("      return i")
-      line("  return -1")
-    }
+  code("code_example") {
+     // A short Python code snippet
+     line("# Let's analyze the time complexity of this function")
+     line("def search(array, target):")
+     line("  for i in range(len(array)):")
+     line("    if array[i] == target:")
+     line("      return i")
+     line("  return -1")
   }
   
   question("question") {
@@ -138,11 +136,5 @@ lessonContent {
   }
 }
 ```
-
-The generated lesson should make students say this is the BEST practical explanation of "$topic". 
-Ensure technical correctness and readability. Focus on short questions and sentences. 
-Follow the best ways the explain the concept from the entire internet to concisely explain "$learningGoal".
-Think step by step and ensure clarity and cohesiveness. Ensure the correct every-day, physical examples are picked.
-Ensure that the examples are correct and straight-forward to understand.
 """.trimIndent()
 }
