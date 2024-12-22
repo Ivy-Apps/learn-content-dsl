@@ -1,25 +1,51 @@
 package ivy.learn.llm
 
 fun main() {
-  val prompt = lessonPrompt(topic = "Time Complexity (Big O notation)")
+  val prompt = lessonPrompt(
+    topic = "Time Complexity (Big O notation)",
+    learningGoal = """
+Understand what is Big O and be able to differentiate between O(1), O(n), O(logn), O(n^2), and O(nlogn).
+   """.trimIndent(),
+    structure = listOf(
+      "Introduction",
+      "Why Time Complexity Matters",
+      "Big O Basics",
+      "Detailed Breakdown of Key Complexities",
+      "Interactive Exercises for Differentiating Complexities",
+      "Real-World Applications of Big O",
+      "Reflection and Problem-Solving"
+    )
+  )
   println("===== PROMPT ====")
   println(prompt)
   println("=====")
 }
 
-fun lessonPrompt(topic: String): String {
+fun lessonPrompt(
+  topic: String,
+  learningGoal: String,
+  structure: List<String>,
+): String {
   return """
-Create an interactive, short, bite-sized lesson on the topic: "$topic".
-Use only the Kotlin DSL defined below—no extra structures or deviations.
+Create an interactive, beginner-friendly lesson to help learners understand $topic. 
+The lesson should be:
+1. Easy to follow: Use simple, clear language with short sections.
+2. Highly visual and example-driven: Include code snippets and real-world analogies to explain concepts.
+3. Engaging: Design with questions and activities learners can interact with, emphasizing key concepts.
 
-Requirements:
-1. Present a brief introduction (`text`).
-2. Ask a "Why" question (`question`), then follow up with an explanation (`text`).
-3. Include a section detailing internal mechanics or key concepts (`text` and optionally `image`).
-4. Three or four questions teaching the mechanics with text explanation after each question.
-5. At least one open-ended question (`openQuestion`) encouraging reflection or problem-solving.
-6. Each question must have 2–4 answers (`answer`) with clear explanations for correctness or incorrectness.
-7. Optionally, showcase a relevant code snippet using `text` + `codeBuilder`.
+# Structure:
+${structure.mapIndexed { index, bullet -> "${index + 1}. $bullet" }.joinToString(separator = "\n")}
+
+**Tone**: Friendly, encouraging, and engaging, aimed at learners new to algorithms or computer science.
+
+**Learning Goal**: Ensure learners can "$learningGoal" with confidence.
+    
+Create an interactive, beginner-friendly lesson to help learners understand: "$topic". The lesson should be:
+1. Easy to follow: Use simple, clear language with short sections.
+2. Highly visual and example-driven: Include code snippets and real-world analogies to explain concepts.
+3. Engaging: Design with questions and activities learners can interact with, emphasizing key concepts.
+
+Use only the Kotlin DSL defined below—no extra structures or deviations.
 
 ### Example Usage of DSL
 ```kotlin
