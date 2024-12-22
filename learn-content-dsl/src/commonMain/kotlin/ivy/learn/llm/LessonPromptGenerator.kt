@@ -1,5 +1,7 @@
 package ivy.learn.llm
 
+import ivy.learn.TextStyle
+
 fun main() {
   val prompt = lessonPrompt(
     topic = "Time Complexity (Big O notation)",
@@ -13,6 +15,7 @@ Understand what is Big O and be able to differentiate between O(1), O(n), O(logn
       "Detailed Breakdown of Key Complexities",
       "Interactive Exercises for Differentiating Complexities",
       "Real-World Applications of Big O",
+      "Practical questions and tricks to identify time complexities in code",
       "Reflection and Problem-Solving"
     ),
     priorKnowledge = emptyList(),
@@ -35,6 +38,8 @@ The lesson should be:
 2. Highly visual and example-driven: Include code snippets, diagrams, and real-world analogies to explain concepts.
 3. Engaging: Incorporate questions, activities, and scenarios learners can interact with, emphasizing key concepts.
 4. Adaptable: The structure and DSL elements should be purposefully selected to achieve the learning goal.
+5. Real-world examples: Include practical examples and analogies.
+6. Guiding questions: The reader should re-invent and re-discover by answering many questions. Focus on questions.
 
 # Structure:
 The following structure is a guideline. Feel free to adapt and reorder elements as needed to best serve the learning goals:
@@ -43,15 +48,13 @@ ${structure.mapIndexed { index, bullet -> "${index + 1}. $bullet" }.joinToString
 **Tone**: Friendly, encouraging, and engaging, aimed at learners new to algorithms or computer science.
 
 **Learning Goal**: Ensure learners can "$learningGoal" with confidence.
+The lesson should be designed in a way where the reader learns the concepts by answering a series of well crafted and guiding questions.
 
 Use only the Kotlin DSL defined below—no extra structures or deviations.
 Ensure that the ids in the lesson are unique and that there are NO duplicated ids.
 
-The lesson should feel coherent, logically connected, and accessible to learners with no prior knowledge besides: "${
-    priorKnowledge.joinToString(
-      separator = ","
-    )
-  }."
+The lesson should feel coherent, logically connected, and accessible to learners with no prior knowledge besides: 
+"${priorKnowledge.joinToString(separator = ",")}".
 
 ### Example usage of DSL
 These examples are NOT prescriptive. Use the DSL flexibly and creatively, choosing the most suitable elements and order to achieve the learning goals.
@@ -59,9 +62,9 @@ These examples are NOT prescriptive. Use the DSL flexibly and creatively, choosi
 ```kotlin
 lessonContent {
   // A creative example deviating from strict order
-  text("introduction") {
-    text = "Understanding Big O Notation"
-    style = TextStyle.Heading
+  text("text") {
+    text = "Some text"
+    style = TextStyle.Heading // Supported ${TextStyle.entries.joinToString(separator = ",")}
   }
 
   codeExample("code_snippet") {
@@ -75,7 +78,7 @@ lessonContent {
     }
   }
 
-  question("real_world_q") {
+  question("question") {
     question = "Which complexity best describes searching for a name in a phonebook?"
     clarification = "Think about the strategy used for searching."
     answer(text = "O(1)", explanation = "Incorrect, this represents constant time complexity.")
@@ -96,6 +99,8 @@ lessonContent {
   }
 }
 ```
+
+Use questions to teach concepts.
 
 # DSL Reference
 ```kotlin
