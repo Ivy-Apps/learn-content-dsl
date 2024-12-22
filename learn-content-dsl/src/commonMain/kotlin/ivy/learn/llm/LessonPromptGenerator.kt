@@ -1,5 +1,7 @@
 package ivy.learn.llm
 
+import ivy.learn.TextStyle
+
 fun main() {
   val prompt = lessonPrompt(
     topic = "Time Complexity (Big O notation)",
@@ -48,25 +50,20 @@ Ensure that the ids in the lesson are unique and that there are NO duplicated id
 The lesson should be feel good, logically connected and explain the concept 
 assuming no prior knowledge beside: "${priorKnowledge.joinToString(separator = ",")}"
 
-### Example Usage of DSL
+### Example usage of DSL
+The order does NOT matter, use any arbitrary order that matches learning goals.
 ```kotlin
-
-// Text
-private fun LessonContentScope.text() {
+lessonContent {
   text("id") {
     text = "Topic Title"
-    style = TextStyle.Heading
+    style = TextStyle.Heading // Supported styles ${TextStyle.entries.joinToString(",")}
   }
-}
 
-private fun LessonContentScope.image() {
   image("topic_diagram") {
     imageUrl = "https://example.com/example_image.png"
   }
-}
 
-// Single Correct Answer (1 of 4)
-private fun LessonContentScope.singleCorrectQuestion() {
+  // Single Correct Answer (1 of 4)
   question("single_correct_q") {
     question = "Which option best represents the core concept?"
     clarification = "Select the most appropriate answer from the options."
@@ -75,20 +72,16 @@ private fun LessonContentScope.singleCorrectQuestion() {
     answer(text = "Option 3", explanation = "This is incorrect as it misunderstands the concept.")
     answer(text = "Option 4", explanation = "This is unrelated to the topic.")
   }
-}
 
-// Two Options Question (1 of 2)
-private fun LessonContentScope.twoOptionsQuestion() {
+  // Two Options Question (1 of 2)
   question("two_options_q") {
     question = "True or False: This concept is applicable to real-world problems."
     clarification = "Consider the practicality of applying this concept."
     answer(text = "True", correct = true, explanation = "Yes, this concept can be applied in many real-world scenarios.")
     answer(text = "False", explanation = "This is incorrect as the concept has practical applications.")
   }
-}
 
-// Multiple Correct Answers (N of M)
-private fun LessonContentScope.multipleCorrectQuestion() {
+  // Multiple Correct Answers (N of M)
   question("multiple_correct_q") {
     question = "Which of the following statements are true about the topic?"
     clarification = "Select all correct answers."
@@ -97,12 +90,9 @@ private fun LessonContentScope.multipleCorrectQuestion() {
     answer(text = "Statement C", correct = true, explanation = "This statement aligns with the principles of the topic.")
     answer(text = "Statement D", explanation = "This is not true as it misrepresents the core idea.")
   }
-}
 
-// Code Example
-private fun LessonContentScope.codeExample() {
+  // Python code example
   codeExample("code_example") {
-    // Use Python for code examples
     text = codeBuilder {
       line("# Example demonstrating the application of the topic")
       line("def exampleFunction():")
@@ -110,7 +100,14 @@ private fun LessonContentScope.codeExample() {
       line("")
       line("exampleFunction()")
     }
-  }
+
+  // Text with bullets
+  text("bullets") {
+    text = textBuilder { 
+      bullet("Bullet one")
+      bullet("Bullet two")
+      bullet("Bullet three")
+    }
 }
 ```
 

@@ -17,6 +17,13 @@ fun exampleLesson() = lessonContent {
     correctAnswer = "4"
   }
   someCode()
+  text("bullets") {
+    text = textBuilder {
+      bullet("Bullet one")
+      bullet("Bullet two")
+      bullet("Bullet three")
+    }
+  }
 }
 
 private fun LessonContentScope.intro() {
