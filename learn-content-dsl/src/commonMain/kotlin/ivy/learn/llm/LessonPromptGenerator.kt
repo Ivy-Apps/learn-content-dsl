@@ -1,7 +1,10 @@
 package ivy.learn.llm
 
 fun main() {
-
+  val prompt = lessonPrompt(topic = "Time Complexity (Big O notation)")
+  println("===== PROMPT ====")
+  println(prompt)
+  println("=====")
 }
 
 fun lessonPrompt(topic: String): String {
