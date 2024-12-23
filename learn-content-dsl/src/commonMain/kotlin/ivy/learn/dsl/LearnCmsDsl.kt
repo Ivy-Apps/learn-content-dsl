@@ -37,9 +37,13 @@ fun lessonJson(): Json = Json {
 }
 
 fun printLessonJson(lesson: LessonContent) {
+  println(lessonToJson(lesson))
+}
+
+fun lessonToJson(lesson: LessonContent): String {
   validateIdsExistence(lesson)
   validateIdsUniqueness(lesson)
-  println(lessonJson().encodeToString(lesson))
+  return lessonJson().encodeToString(lesson)
 }
 
 fun story(
